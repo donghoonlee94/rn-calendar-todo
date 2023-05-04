@@ -2,23 +2,44 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { runPracticeDayjs } from './src/pratice-dayjs';
-import { getCalendarColumns } from './src/util';
+import { getCalendarColumns, getDayColor, getDayText } from './src/util';
 import dayjs from "dayjs";
 
 export default function App() {
   const now = dayjs();
   const columns = getCalendarColumns(now);
 
-  const renderItem = ({ item: date }) =>  {
-    const dateText = dayjs(date).get('date');
-    const day = dayjs(date).get('day');
-    const color = day === 0 ? '#e67639' : day === 6 ? '#5872d1' : '#2b2b2b';
-    const isCurrentMonth = dayjs(date).isSame(now, 'month');
+  const Column = ({ text, color, opacity }) => {
 
     return (
       <View style={{ width: 30, height: 30, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color, opacity: isCurrentMonth ? 1 : 0.4 }}>{dateText} </Text>
-      </View>
+        <Text style={{ color, opacity }}>{text} </Text>
+      </View>      
+    );
+  };
+
+  const ListHeaderComponent = () => {
+    <View>
+      { /* YYYY MM DD */ }
+      {[0, 1, 2, 3, 4, 5, 6].map(day => {
+        const dateText = getDayText(day);
+        const color = getDayColor(day);
+
+        return (
+          <Column text={dateText} color={color} opacity={1} />
+        )
+      })}
+    </View>
+  };
+
+  const renderItem = ({ item: date }) =>  {
+    const dateText = dayjs(date).get('date');
+    const day = dayjs(date).get('day');
+    const color = getDayColor(day);
+    const isCurrentMonth = dayjs(date).isSame(now, 'month');
+
+    return (
+      <Column text={dateText} color={color} opacity={isCurrentMonth ? 1 : 0.4} />
     )
   }
 
@@ -33,6 +54,7 @@ export default function App() {
         data={columns}
         numColumns={7}
         renderItem={renderItem}
+        ListHeaderComponent={ListHeaderComponent}
       />
     </SafeAreaView>
   );
