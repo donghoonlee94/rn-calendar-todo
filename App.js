@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { runPracticeDayjs } from './src/pratice-dayjs';
 import { getCalendarColumns, getDayColor, getDayText } from './src/util';
@@ -9,14 +9,15 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 
 export default function App() {
   const now = dayjs();
-  const columns = getCalendarColumns(now);
+  const [selectedDate, setSelectedDate] = useState(now);
+  const columns = getCalendarColumns(selectedDate);
 
-  const Column = ({ text, color, opacity }) => {
+  const Column = ({ text, color, opacity, disabled, onPress }) => {
 
     return (
-      <View style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableOpacity disabled={disabled} onPress={onPress} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color, opacity }}>{text} </Text>
-      </View>      
+      </TouchableOpacity>      
     );
   };
 
@@ -29,7 +30,7 @@ export default function App() {
   }
 
   const ListHeaderComponent = () => {
-    const currentDateText = dayjs(now).format('YYYY.MM.DD');
+    const currentDateText = dayjs(selectedDate).format('YYYY.MM.DD');
 
     return (
       <View>
@@ -53,7 +54,7 @@ export default function App() {
             const color = getDayColor(day);
 
             return (
-              <Column key={`day-${day}`} text={dateText} color={color} opacity={1} />
+              <Column key={`day-${day}`} text={dateText} color={color} opacity={1} disabled />
             )
           })}
         </View>
@@ -65,16 +66,24 @@ export default function App() {
     const dateText = dayjs(date).get('date');
     const day = dayjs(date).get('day');
     const color = getDayColor(day);
-    const isCurrentMonth = dayjs(date).isSame(now, 'month');
+    const isCurrentMonth = dayjs(date).isSame(selectedDate, 'month');
+    const onPress = () => {
+      setSelectedDate(date);
+    };
 
     return (
-      <Column text={dateText} color={color} opacity={isCurrentMonth ? 1 : 0.4} />
+      <Column
+        text={dateText}
+        color={color}
+        opacity={isCurrentMonth ? 1 : 0.4}
+        onPress={onPress}
+      />
     )
   }
 
   useEffect(() => {
-    console.log(columns)
-  }, [])
+    console.log('selectedDate', selectedDate)
+  }, [selectedDate])
 
   return (
     <SafeAreaView style={styles.container}>
