@@ -12,10 +12,10 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(now);
   const columns = getCalendarColumns(selectedDate);
 
-  const Column = ({ text, color, opacity, disabled, onPress }) => {
+  const Column = ({ text, color, opacity, disabled, onPress, isSelected }) => {
 
     return (
-      <TouchableOpacity disabled={disabled} onPress={onPress} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center' }}>
+      <TouchableOpacity disabled={disabled} onPress={onPress} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: isSelected ? "#c2c2c2" : 'transparent', borderRadius: 17.5 }}>
         <Text style={{ color, opacity }}>{text} </Text>
       </TouchableOpacity>      
     );
@@ -70,6 +70,7 @@ export default function App() {
     const onPress = () => {
       setSelectedDate(date);
     };
+    const isSelected = dayjs(date).isSame(selectedDate, 'date');
 
     return (
       <Column
@@ -77,6 +78,7 @@ export default function App() {
         color={color}
         opacity={isCurrentMonth ? 1 : 0.4}
         onPress={onPress}
+        isSelected={isSelected}
       />
     )
   }
