@@ -32,6 +32,7 @@ export default function App() {
     const newSelectedDate = dayjs(selectedDate).subtract(1, 'month');
     setSelectedDate(newSelectedDate);
   }
+
   const onPressRightArrow = () =>{
     const newSelectedDate = dayjs(selectedDate).add(1, 'month');
     setSelectedDate(newSelectedDate);
@@ -62,13 +63,13 @@ export default function App() {
         <Margin height={15} />
 
         <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-          <ArrowButton iconName="arrow-left" onPress={() => {}} />
+          <ArrowButton iconName="arrow-left" onPress={onPressLeftArrow} />
 
           <TouchableOpacity onPress={showDatePicker}>
             <Text style={{ fontSize: 20, color: "#404040" }}>{currentDateText}</Text>
           </TouchableOpacity>
 
-          <ArrowButton iconName="arrow-right" onPress={() => {}} />
+          <ArrowButton iconName="arrow-right" onPress={onPressRightArrow} />
         </View>
 
         <Margin height={15} />
