@@ -26,6 +26,8 @@ export default function App() {
   const onPressHeaderDate = showDatePicker;
   const onPressDate = setSelectedDate;
 
+  const onPressAdd = () => {};
+
   const ListHeaderComponent = () => (
     <View>
       <Calendar
@@ -78,6 +80,8 @@ export default function App() {
       <AddTodoInput
         value={input}
         onChangeText={setInput}
+        placeholder={`${dayjs(selectedDate).format('MM.DD')}에 추가할 Todo`}
+        onPressAdd={onPressAdd}
       />
       
       <DateTimePickerModal
