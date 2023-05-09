@@ -1,18 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { useEffect, useState } from 'react';
+import { SimpleLineIcons } from '@expo/vector-icons'; 
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { StatusBar } from 'expo-status-bar';
+
 import { runPracticeDayjs } from './src/pratice-dayjs';
 import { getCalendarColumns, getDayColor, getDayText } from './src/util';
 import dayjs from "dayjs";
 import Margin from './src/Margin';
-import { SimpleLineIcons } from '@expo/vector-icons'; 
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useCalendar } from './src/hook/use-calendar';
+import { useTodoList } from './src/hook/use-todo-list'
+
+const statusBarHeight = getStatusBarHeight(true);
 
 export default function App() {
   const now = dayjs();
 
   const { selectedDate, isDatePickerVisible, showDatePicker, hideDatePicker, handleConfirm, add1Month, subtract1Month, setSelectedDate } = useCalendar(now);
+
+  const { todoList } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
 
@@ -106,12 +113,22 @@ export default function App() {
         }}
       />
       <FlatList 
-        contentContainerStyle={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
+        contentContainerStyle={{ paddingTop: statusBarHeight }}
         data={columns}
         keyExtractor={(_, index) => `column-${index}`}
         numColumns={7}
         renderItem={renderItem}
         ListHeaderComponent={ListHeaderComponent}
+      />
+
+      <FlatList
+        data={todoList}
+        // ListHeaderComponent={ListHeaderComponent}
+        renderItem={({ item: todo }) => {
+          return (
+            <Text>{todo.content}</Text>
+          )
+        }}
       />
       
       <DateTimePickerModal
