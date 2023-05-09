@@ -10,16 +10,15 @@ export default ({
   onPressAdd
 }) => {
   return (
-    <View style={{ width: ITEM_WIDTH, marginBottom: !!bottomSpace ? bottomSpace : 25 , flexDirection: 'row', alignItems: "center" }}>
+    <View style={{ width: ITEM_WIDTH,  flexDirection: 'row', alignItems: "center", alignSelf: "center" }}>
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         style={{
           flex: 1,
-          backgroundColor: 'yellow',
           padding: 5,
-          paddingBottom: 10
+          color: '#595959'
         }}
       />
       <TouchableOpacity onPress={onPressAdd} style={{ padding: 5 }}>

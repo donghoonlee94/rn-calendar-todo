@@ -1,11 +1,11 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Platform, Pressable, Keyboard } from 'react-native';
 import { useEffect, useState } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { StatusBar } from 'expo-status-bar';
 import dayjs from "dayjs";
 import { Ionicons } from '@expo/vector-icons'
 
-import { getCalendarColumns, getDayColor, getDayText, ITEM_WIDTH, statusBarHeight } from './src/util';
+import { bottomSpace, getCalendarColumns, getDayColor, getDayText, ITEM_WIDTH, statusBarHeight } from './src/util';
 import { useCalendar } from './src/hook/use-calendar';
 import { useTodoList } from './src/hook/use-todo-list'
 import Calendar from './src/Calendar';
@@ -59,7 +59,7 @@ export default function App() {
   }, [selectedDate])
 
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={Keyboard.dismiss}>
       <Image
         source={{ uri: "https://img.freepik.com/free-photo/white-crumpled-paper-texture-for-background_1373-159.jpg?w=1060&t=st=1667524235~exp=1667524835~hmac=8a3d988d6c33a32017e280768e1aa4037b1ec8078c98fe21f0ea2ef361aebf2c", }}
         style={{
@@ -70,19 +70,25 @@ export default function App() {
       />
 
 
-      <FlatList
-        contentContainerStyle={{ paddingTop: statusBarHeight }}
-        data={todoList}
-        ListHeaderComponent={ListHeaderComponent}
-        renderItem={renderItem}
-      />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <View style={{ flex: 1 }}>
+          <FlatList
+            contentContainerStyle={{ paddingTop: statusBarHeight }}
+            data={todoList}
+            ListHeaderComponent={ListHeaderComponent}
+            renderItem={renderItem}
+          />
 
-      <AddTodoInput
-        value={input}
-        onChangeText={setInput}
-        placeholder={`${dayjs(selectedDate).format('MM.DD')}에 추가할 Todo`}
-        onPressAdd={onPressAdd}
-      />
+          <AddTodoInput
+            value={input}
+            onChangeText={setInput}
+            placeholder={`${dayjs(selectedDate).format('MM.DD')}에 추가할 Todo`}
+            onPressAdd={onPressAdd}
+          />        
+        </View>
+      </KeyboardAvoidingView>
+
+      <Margin height={bottomSpace} />
       
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
@@ -90,7 +96,7 @@ export default function App() {
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />      
-    </View>
+    </Pressable>
   );
 }
 
