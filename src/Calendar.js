@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, View, TouchableOpacity, Text } from "react-native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { getDayColor, getDayText } from './src/util';
+import { getDayColor, getDayText } from './util';
 import dayjs from "dayjs";
-import Margin from './src/Margin';
+import Margin from './Margin';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
 

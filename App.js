@@ -5,21 +5,19 @@ import { StatusBar } from 'expo-status-bar';
 import dayjs from "dayjs";
 import { Ionicons } from '@expo/vector-icons'
 
-import { getCalendarColumns, getDayColor, getDayText } from './src/util';
+import { getCalendarColumns, getDayColor, getDayText, ITEM_WIDTH, statusBarHeight } from './src/util';
 import { useCalendar } from './src/hook/use-calendar';
 import { useTodoList } from './src/hook/use-todo-list'
-import Calendar from './Calendar';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import Calendar from './src/Calendar';
 import Margin from './src/Margin';
-
-const statusBarHeight = getStatusBarHeight(true);
+import AddTodoInput from './src/AddTodoInput';
 
 export default function App() {
   const now = dayjs();
 
   const { selectedDate, isDatePickerVisible, showDatePicker, hideDatePicker, handleConfirm, add1Month, subtract1Month, setSelectedDate } = useCalendar(now);
 
-  const { todoList } = useTodoList(selectedDate);
+  const { todoList, input, setInput } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
 
@@ -46,7 +44,7 @@ export default function App() {
 
   const renderItem = ({ item: todo }) => {
     return (
-      <View style={{ flexDirection: "row", width: 220, backgroundColor: todo.id % 2 === 0 ? 'pink' : 'lightblue', alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 5, borderBottomWidth: 0.2, borderColor: '#a6a6a6' }}>
+      <View style={{ flexDirection: "row", width: ITEM_WIDTH, backgroundColor: todo.id % 2 === 0 ? 'pink' : 'lightblue', alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 5, borderBottomWidth: 0.2, borderColor: '#a6a6a6' }}>
         <Text style={{ flex: 1, fontSize: 14, color: '#595959' }}>{todo.content}</Text>
         <Ionicons name="ios-checkmark" size={17} color={todo.isSuccess ? '#595959' : '#bfbfbf'} />
       </View>
@@ -75,6 +73,11 @@ export default function App() {
         data={todoList}
         ListHeaderComponent={ListHeaderComponent}
         renderItem={renderItem}
+      />
+
+      <AddTodoInput
+        value={input}
+        onChangeText={setInput}
       />
       
       <DateTimePickerModal
