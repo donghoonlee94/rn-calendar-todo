@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { runPracticeDayjs } from './src/pratice-dayjs';
 import { getCalendarColumns, getDayColor, getDayText } from './src/util';
 import dayjs from "dayjs";
@@ -96,7 +96,10 @@ export default function App() {
   }, [selectedDate])
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <Image
+        source={{ uri: "https://img.freepik.com/free-photo/white-crumpled-paper-texture-for-background_1373-159.jpg?w=1060&t=st=1667524235~exp=1667524835~hmac=8a3d988d6c33a32017e280768e1aa4037b1ec8078c98fe21f0ea2ef361aebf2c", }}
+      />
       <FlatList 
         contentContainerStyle={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
         data={columns}
@@ -112,7 +115,7 @@ export default function App() {
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
       />      
-    </SafeAreaView>
+    </View>
   );
 }
 
