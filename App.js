@@ -28,20 +28,26 @@ export default function App() {
   const onPressHeaderDate = showDatePicker;
   const onPressDate = setSelectedDate;
 
+  const scrollToEnd = () => {
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd();
+    }, 100);    
+  };
+
   const onPressAdd = () => {
     addTodo();
     resetInput();
+    scrollToEnd();
   };
 
   const onSubmitEditing = () => {
     addTodo();
     resetInput();
+    scrollToEnd();
   };
 
   const onFocus = () => {
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd();
-    }, 100);
+    scrollToEnd();
   };
 
   const ListHeaderComponent = () => (
@@ -105,13 +111,15 @@ export default function App() {
 
 
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View style={{ flex: 1 }}>
+        <>
           <FlatList
             ref={flatListRef}
+            style={{ flex: 1 }}
             contentContainerStyle={{ paddingTop: statusBarHeight + 30 }}
             data={todoList}
             ListHeaderComponent={ListHeaderComponent}
             renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
           />
 
           <AddTodoInput
@@ -122,7 +130,7 @@ export default function App() {
             onSubmitEditing={onSubmitEditing}
             onFocus={onFocus}
           />        
-        </View>
+        </>
       </KeyboardAvoidingView>
 
       <Margin height={bottomSpace} />
