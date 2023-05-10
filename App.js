@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Platform, Pressable, Keyboard } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Platform, Pressable, Keyboard, Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { StatusBar } from 'expo-status-bar';
@@ -17,7 +17,7 @@ export default function App() {
 
   const { selectedDate, isDatePickerVisible, showDatePicker, hideDatePicker, handleConfirm, add1Month, subtract1Month, setSelectedDate } = useCalendar(now);
 
-  const { todoList, input, setInput, addTodo, toggleTodo } = useTodoList(selectedDate);
+  const { todoList, input, setInput, addTodo, toggleTodo, removeTodo } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
 
@@ -45,11 +45,25 @@ export default function App() {
   );
 
   const renderItem = ({ item: todo }) => {
-    const onPress = () => toggleTodo(todo.id)
+    const onPress = () => toggleTodo(todo.id);
+    const onLongPress = () => {
+      Alert.alert('삭제하시겠어요?', '', [
+        {
+          style: 'cancel',
+          text:'아니요'
+        },
+        {
+          text: '네',
+          onPress: () => removeTodo(todo.id),
+        }
+      ]);
+    };
+
     return (
       <Pressable 
         style={{ flexDirection: "row", width: ITEM_WIDTH, backgroundColor: todo.id % 2 === 0 ? 'pink' : 'lightblue', alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 5, borderBottomWidth: 0.2, borderColor: '#a6a6a6' }}
         onPress={onPress}
+        onLongPress={onLongPress}
       >
         <Text style={{ flex: 1, fontSize: 14, color: '#595959' }}>{todo.content}</Text>
         <Ionicons name="ios-checkmark" size={17} color={todo.isSuccess ? '#595959' : '#bfbfbf'} />
