@@ -73,7 +73,7 @@ export default function App() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={{ flex: 1 }}>
           <FlatList
-            contentContainerStyle={{ paddingTop: statusBarHeight }}
+            contentContainerStyle={{ paddingTop: statusBarHeight + 30 }}
             data={todoList}
             ListHeaderComponent={ListHeaderComponent}
             renderItem={renderItem}
