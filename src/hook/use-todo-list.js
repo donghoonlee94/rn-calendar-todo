@@ -33,7 +33,7 @@ export const useTodoList = (selectedDate) => {
     const newTodoList = [
       ...todoList,
       {
-        id: ++lastId, content: input, date: selectedDate, isSuccess: false,
+        id: lastId + 1, content: input, date: selectedDate, isSuccess: false,
       }
     ];
     setTodoList(newTodoList);
@@ -55,12 +55,15 @@ export const useTodoList = (selectedDate) => {
     setTodoList(newTodoList);
   };
 
+  const resetInput = () => setInput('');
+
   return {
     todoList,
     addTodo,
     removeTodo,
     toggleTodo,
     input,
-    setInput
+    setInput,
+    resetInput,
   };
 };

@@ -1,5 +1,5 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView, Platform, Pressable, Keyboard, Alert } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { StatusBar } from 'expo-status-bar';
 import dayjs from "dayjs";
@@ -17,16 +17,32 @@ export default function App() {
 
   const { selectedDate, isDatePickerVisible, showDatePicker, hideDatePicker, handleConfirm, add1Month, subtract1Month, setSelectedDate } = useCalendar(now);
 
-  const { todoList, input, setInput, addTodo, toggleTodo, removeTodo } = useTodoList(selectedDate);
+  const { todoList, input, setInput, addTodo, toggleTodo, removeTodo, resetInput } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
+
+  const flatListRef = useRef(null);
 
   const onPressLeftArrow = subtract1Month;
   const onPressRightArrow = add1Month;
   const onPressHeaderDate = showDatePicker;
   const onPressDate = setSelectedDate;
 
-  const onPressAdd = () => {};
+  const onPressAdd = () => {
+    addTodo();
+    resetInput();
+  };
+
+  const onSubmitEditing = () => {
+    addTodo();
+    resetInput();
+  };
+
+  const onFocus = () => {
+    setTimeout(() => {
+      flatListRef.current?.scrollToEnd();
+    }, 100);
+  };
 
   const ListHeaderComponent = () => (
     <View>
@@ -61,7 +77,7 @@ export default function App() {
 
     return (
       <Pressable 
-        style={{ flexDirection: "row", width: ITEM_WIDTH, backgroundColor: todo.id % 2 === 0 ? 'pink' : 'lightblue', alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 5, borderBottomWidth: 0.2, borderColor: '#a6a6a6' }}
+        style={{ flexDirection: "row", width: ITEM_WIDTH, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 5, borderBottomWidth: 0.2, borderColor: '#a6a6a6' }}
         onPress={onPress}
         onLongPress={onLongPress}
       >
@@ -91,6 +107,7 @@ export default function App() {
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={{ flex: 1 }}>
           <FlatList
+            ref={flatListRef}
             contentContainerStyle={{ paddingTop: statusBarHeight + 30 }}
             data={todoList}
             ListHeaderComponent={ListHeaderComponent}
@@ -102,6 +119,8 @@ export default function App() {
             onChangeText={setInput}
             placeholder={`${dayjs(selectedDate).format('MM.DD')}에 추가할 Todo`}
             onPressAdd={onPressAdd}
+            onSubmitEditing={onSubmitEditing}
+            onFocus={onFocus}
           />        
         </View>
       </KeyboardAvoidingView>
