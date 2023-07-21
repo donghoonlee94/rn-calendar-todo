@@ -3,24 +3,7 @@ import { useEffect, useState } from "react"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const defaultTodoList = [
-  // {
-  //   id: 1,
-  //   content: "운동하기",
-  //   date: dayjs(),
-  //   isSuccess: true,
-  // },
-  // {
-  //   id: 2,
-  //   content: "공부하기",
-  //   date: dayjs(),
-  //   isSuccess: false,
-  // },
-  // {
-  //   id: 3,
-  //   content: "RN 강의 수강하기",
-  //   date: dayjs(),
-  //   isSuccess: true,
-  // },
+
 ];
 
 const TODO_LIST_KEY = 'TODO_LIST_KEY';
