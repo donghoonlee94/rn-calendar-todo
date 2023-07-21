@@ -9,12 +9,12 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 const statusBarHeight = getStatusBarHeight(true);
 
 
-export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHeaderDate, onPressDate, columns }) => {
+export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHeaderDate, onPressDate, columns, hasTodo }) => {
   const Column = ({ text, color, opacity, disabled, onPress, isSelected }) => {
 
     return (
       <TouchableOpacity disabled={disabled} onPress={onPress} style={{ width: 35, height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: isSelected ? "#c2c2c2" : 'transparent', borderRadius: 17.5 }}>
-        <Text style={{ color, opacity }}>{text} </Text>
+        <Text style={{ color, opacity, fontWeight: hasTodo ? 'bold' : 'normal' }}>{text} </Text>
       </TouchableOpacity>      
     );
   };
@@ -67,6 +67,7 @@ export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHead
     const isCurrentMonth = dayjs(date).isSame(selectedDate, 'month');
     const onPress = () => onPressDate(date)
     const isSelected = dayjs(date).isSame(selectedDate, 'date');
+    const hasTodo = todoList.find(todo => dayjs(todo.date).isSame(dayjs(date), 'date'));
 
     return (
       <Column
@@ -75,6 +76,7 @@ export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHead
         opacity={isCurrentMonth ? 1 : 0.4}
         onPress={onPress}
         isSelected={isSelected}
+        hasTodo={hasTodo}
       />
     )
   }
