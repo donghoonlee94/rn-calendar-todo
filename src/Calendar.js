@@ -9,7 +9,7 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 const statusBarHeight = getStatusBarHeight(true);
 
 
-export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHeaderDate, onPressDate, columns, hasTodo }) => {
+export default ({ selectedDate, onPressLeftArrow, onPressRightArrow, onPressHeaderDate, onPressDate, columns, hasTodo, todoList }) => {
   const Column = ({ text, color, opacity, disabled, onPress, isSelected }) => {
 
     return (
