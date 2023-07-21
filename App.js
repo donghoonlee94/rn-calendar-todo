@@ -17,7 +17,7 @@ export default function App() {
 
   const { selectedDate, isDatePickerVisible, showDatePicker, hideDatePicker, handleConfirm, add1Month, subtract1Month, setSelectedDate } = useCalendar(now);
 
-  const { todoList, input, setInput, addTodo, toggleTodo, removeTodo, resetInput } = useTodoList(selectedDate);
+  const { filteredTodoList, todoList, input, setInput, addTodo, toggleTodo, removeTodo, resetInput } = useTodoList(selectedDate);
 
   const columns = getCalendarColumns(selectedDate);
 
@@ -116,7 +116,7 @@ export default function App() {
             ref={flatListRef}
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingTop: statusBarHeight + 30 }}
-            data={todoList}
+            data={filteredTodoList}
             ListHeaderComponent={ListHeaderComponent}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
